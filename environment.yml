@@ -3,3 +3,7 @@ channels:
 dependencies:
   - numpy
   - jupyter-server-proxy
+  - jupyter
+  - jupyterlab
+  - notebook
+  - pandas

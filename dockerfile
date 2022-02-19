@@ -1,4 +1,4 @@
-ROM debian:buster-slim
+FROM debian:buster-slim
 
 ENV SHELL /bin/bash
   
@@ -27,8 +27,18 @@ RUN mv ~/.local/lib/code-server-3.9.3-linux-amd64 ~/.local/lib/code-server-3.9.3
 RUN ln -s ~/.local/lib/code-server-3.9.3/bin/code-server ~/.local/bin/code-server
 RUN PATH="~/.local/bin:$PATH"
 
-WORKDIR /app
-CMD ~/.local/bin/code-server --bind-addr 0.0.0.0:8080 /app
+# create user with a home directory
+ARG NB_USER
+ARG NB_UID
+ENV USER ${NB_USER}
+ENV HOME /home/${NB_USER}
+
+RUN adduser --disabled-password \
+    --gecos "Default user" \
+    --uid ${NB_UID} \
+    ${NB_USER}
+WORKDIR ${HOME}
+CMD ~/.local/bin/code-server --bind-addr 0.0.0.0:8080 /${HOME}
 
 # docker build -t jupyter .
 # docker run -v $(pwd):/app -p 8080:8080 -p ... -it -d jupyter

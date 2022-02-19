@@ -14,11 +14,14 @@ RUN apt-get update \
     procps \
  && apt-get clean
 
+# Create the environment:
+COPY environment.yml .
+
 # Install miniconda
 RUN curl -sfLO https://repo.anaconda.com/miniconda/Miniconda3-py39_4.9.2-Linux-x86_64.sh \
  && /bin/bash Miniconda3-py39_4.9.2-Linux-x86_64.sh -b -p /root/miniconda \
  && PATH="/root/miniconda/bin:$PATH" \
- && conda install -c anaconda jupyter jupyterlab notebook
+ && conda env create -f environment.yml
 
 ## Code server
 RUN mkdir -p ~/.local/lib ~/.local/bin
